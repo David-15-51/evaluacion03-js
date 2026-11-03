@@ -40,12 +40,12 @@ evaluacion03-js/
     pedidos.js          Clase Pedido, arreglo y funciones de datos
     ui.js               Funciones de renderizado del DOM
     main.js             Punto de entrada y registro de eventos
-    analisis-manual.md  Tabla de eventos, modelo de objeto y justificaciones
+    análisis.md         Tabla de eventos, modelo de objeto y justificaciones
   p2-modulos/
     index.html          Pagina de prueba de modulos
     codigo-antiguo.js   Codigo original del practicante (con bug)
     pedidos.js          Refactorizacion ES6+ con class y modulos
-    calculo-manual.md   Calculo manual, explicacion del bug y tabla ES6+
+    cálculo.md   Calculo manual, explicacion del bug y tabla ES6+
   p3-api/
     index.html          Widget ClimaTec
     clima.js            Logica de consumo de Open-Meteo y medicion de tiempos
@@ -100,6 +100,12 @@ function crearFilaPedido(pedido) {
   return li;
 }
 ```
+
+### Capturas P1
+
+![Pagina funcionando](img/p1/imgp1.png)
+![Prueba XSS con innerHTML](img/p1/p1.2.png)
+![Prueba XSS con textContent](img/p1/p1.3.png)
 
 ---
 
@@ -159,7 +165,12 @@ has been blocked by CORS policy
 ```
 
 Causa: los modulos ES requieren HTTP para las cabeceras CORS.
-Solucion: servir con Live Server (http://127.0.0.1:5500) o `python3 -m http.server`.
+Solucion: servir con Live Server (http://127.0.0.1:5500).
+
+### Captura P2
+
+![Error con file://](img/p2/imgp2.png)
+![Verificacion calculo en consola](img/p2/p2.1.png)
 
 ### Justificacion del tipo de export
 
@@ -227,29 +238,36 @@ async function buscarYMostrar(nombreCiudad) {
 ### Por que fetch no lanza error ante 404 o 500
 
 fetch() solo rechaza la promesa ante fallas de red (sin conexion, DNS, timeout).
-Una respuesta HTTP 404 o 500 es una respuesta valida del servidor; la red funciono.
+Una respuesta HTTP 404 o 500 es una respuesta valida del servidor; la red funcionó.
 Por eso se debe verificar `response.ok` manualmente antes de leer el cuerpo.
 
 ### Promise.all vs Promise.allSettled
 
 Se usa **Promise.allSettled** cuando se miden las tres ciudades juntas porque
-permite mostrar los resultados disponibles aunque una ciudad falle (por ejemplo,
-"Xyzabc" no existe). Promise.all cancelaria toda la operacion ante el primer error.
+permite mostrar los resultados disponibles aunque una ciudad falle. Promise.all cancelaria toda la operacion ante el primer error.
 Para el caso de una sola ciudad (busqueda del usuario) se usa el flujo secuencial
 con await y try/catch porque los dos pasos son dependientes entre si.
 
-### Tabla de tiempos (ejemplo referencial - reemplazar con mediciones reales)
+### Tabla de tiempos
 
 | Corrida | Secuencial (ms) | Paralelo (ms) |
 |---------|-----------------|---------------|
-| 1       | ~1800           | ~700          |
-| 2       | ~1750           | ~680          |
-| 3       | ~1820           | ~720          |
-| Promedio| ~1790           | ~700          |
+| 1       |       409       |     402        |
+| 2       |      404        |     138        |
+| 3       |      407        |     137        |
+| Promedio|      407        |      225       |
 
-Conclusion: Promise.all es aproximadamente 2.5x mas rapido porque las tres
-peticiones se inician al mismo tiempo y el tiempo total es el de la peticion
-mas lenta, no la suma de las tres.
+Conclusion: Promise.all es mas rapido porque las tres peticiones se inician
+al mismo tiempo y el tiempo total es el de la peticion mas lenta, no la suma
+de las tres. Los valores exactos se obtienen ejecutando el boton "Medir Lima,
+Cusco y Arequipa" en la pagina y registrando los resultados de la consola.
+
+### Capturas P3
+
+![Estado cargando](img/p3/cargando.png)
+![Resultado exitoso](img/p3/imgp3.png)
+![Ciudad no encontrada](img/p3/cuidadnotfound.png)
+![Sin conexion](img/p3/internetdemicasa.png)
 
 ---
 
@@ -268,7 +286,7 @@ mas lenta, no la suma de las tres.
 
 ## Checklist de entregables
 
-- [x] P1: tabla de eventos (p1-dom/analisis-manual.md)
+- [x] P1: tabla de eventos (p1-dom/análisis.md)
 - [x] P1: modelo de objeto Pedido con metodos subtotal() y marcarEntregado()
 - [x] P1: arreglo de pedidos y funcion render() basada en el arreglo
 - [x] P1: validacion con preventDefault() y mensajes en #mensaje (sin alert)
